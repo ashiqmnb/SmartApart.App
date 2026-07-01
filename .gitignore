@@ -1,0 +1,40 @@
+# ── Dart / Flutter build artifacts ──────────────────────────
+# Regenerated every build — never commit, just wastes repo space
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+*.g.dart          # generated code (once we add code-gen packages later)
+
+# ── IDE ──────────────────────────────────────────────────────
+.idea/
+*.iml
+*.iws
+.vscode/
+
+# ── Android ──────────────────────────────────────────────────
+# local.properties has YOUR machine's SDK path — meaningless/wrong on
+# anyone else's computer, so it must never be committed
+android/local.properties
+android/**/*.keystore
+android/**/*.jks
+android/key.properties       # will hold release-signing secrets later
+
+# ── Firebase config — added in Step 6, excluding proactively now ──
+# These files are tied to your specific Firebase project. Not committing
+# them means anyone else cloning the repo needs their own copy.
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# ── iOS ──────────────────────────────────────────────────────
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+
+# ── macOS ────────────────────────────────────────────────────
+.DS_Store
+
+# ── Windows ──────────────────────────────────────────────────
+Thumbs.db
