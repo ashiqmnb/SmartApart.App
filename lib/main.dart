@@ -1,45 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
+import 'core/router/app_router.dart';
+import 'features/auth/presentation/providers/auth_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+
   runApp(const SmartApartApp());
 }
 
-class SmartApartApp extends StatefulWidget {
+@pragma('vm:entry-point')
+Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+}
+
+class SmartApartApp extends StatelessWidget {
   const SmartApartApp({super.key});
 
   @override
-  State<SmartApartApp> createState() => _SmartApartAppState();
-}
-
-class _SmartApartAppState extends State<SmartApartApp> {
-  // Temporary — lets us manually flip between light/dark to check the theme.
-  // This will be replaced by a proper ThemeProvider in Phase 2.7.
-  ThemeMode _themeMode = ThemeMode.light;
-
-  void _toggleTheme() {
-    setState(() {
-      _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    });
-  }
-
-
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SmartApart',
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: _themeMode,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('SmartApart')),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: _toggleTheme,
-            child: const Text('Toggle theme'),
-          ),
-        ),
+    return MultiProvider(
+      // MultiProvider just lets us register several providers at once —
+      // right now it's only AuthProvider, but ResidentProvider,
+      // VisitorProvider etc. will be added here in later phases.
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: MaterialApp.router(
+        title: 'SmartApart',
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.system,
+        routerConfig: appRouter,
       ),
     );
   }

@@ -1,6 +1,6 @@
-/// Mirrors the backend's ApiResponse<T> wrapper.
+/// Mirrors the backend's `ApiResponse<T>` wrapper.
 /// [fromJsonT] tells this class how to convert the raw `data` field
-/// into your actual model (e.g. a User, a List<Visitor>, etc.)
+/// into your actual model (e.g. a User, a `List<Visitor>`, etc.)
 class ApiResponse<T> {
   final bool success;
   final String message;
