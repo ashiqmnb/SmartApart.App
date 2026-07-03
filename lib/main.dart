@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'features/auth/presentation/providers/profile_provider.dart';
+import 'features/residents/presentation/providers/family_member_provider.dart';
+import 'features/residents/presentation/providers/resident_provider.dart';
 import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
@@ -35,6 +38,9 @@ class SmartApartApp extends StatelessWidget {
       // VisitorProvider etc. will be added here in later phases.
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => ResidentProvider()),
+        ChangeNotifierProvider(create: (_) => FamilyMemberProvider()),
       ],
       child: MaterialApp.router(
         title: 'SmartApart',
