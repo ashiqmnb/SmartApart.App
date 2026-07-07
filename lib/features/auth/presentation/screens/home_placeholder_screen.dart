@@ -26,6 +26,11 @@ class HomePlaceholderScreen extends StatelessWidget {
               onPressed: () => context.push(RouteNames.profile),
               child: const Text('Profile (debug)'),
             ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => context.push(RouteNames.residentDirectory),
+              child: const Text('Resident Directory (debug)'),
+            ),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () async {
@@ -33,6 +38,16 @@ class HomePlaceholderScreen extends StatelessWidget {
                 if (context.mounted) context.go(RouteNames.login);
               },
               child: const Text('Logout (debug)'),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => context.push(RouteNames.visitorLog),
+              child: const Text('Visitor Log (debug)'),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => context.push(RouteNames.registerVisitor),
+              child: const Text('Register Visitor (debug)'),
             ),
           ],
         ),

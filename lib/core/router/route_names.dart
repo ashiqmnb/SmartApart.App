@@ -17,4 +17,11 @@ class RouteNames {
   static const String familyMembers = '/family-members';
   static const String addFamilyMember = '/family-members/add';
   static const String editFamilyMember = '/family-members/edit';
+
+  static const String residentDirectory = '/resident-directory';
+  static const String residentDetail = '/resident-detail';
+
+  static const String visitorLog = '/visitor-log';
+  static const String visitorDetail = '/visitor-detail';
+  static const String registerVisitor = '/register-visitor';
 }

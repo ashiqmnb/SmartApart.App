@@ -8,6 +8,11 @@ import '../../features/residents/presentation/screens/add_edit_family_member_scr
 import '../../features/residents/presentation/screens/edit_profile_screen.dart';
 import '../../features/residents/presentation/screens/family_members_screen.dart';
 import '../../features/residents/presentation/screens/profile_screen.dart';
+import '../../features/residents/presentation/screens/resident_detail_screen.dart';
+import '../../features/residents/presentation/screens/resident_directory_screen.dart';
+import '../../features/visitors/presentation/screens/register_visitor_screen.dart';
+import '../../features/visitors/presentation/screens/visitor_detail_screen.dart';
+import '../../features/visitors/presentation/screens/visitor_log_screen.dart';
 import '../storage/secure_storage.dart';
 import 'route_names.dart';
 
@@ -106,6 +111,35 @@ final GoRouter appRouter = GoRouter(
         // FamilyMembersScreen's onTap (context.push(path, extra: member)).
         final member = state.extra as FamilyMemberModel?;
         return AddEditFamilyMemberScreen(existingMember: member);
+      },
+    ),
+
+
+    GoRoute(
+      path: RouteNames.residentDirectory,
+      builder: (context, state) => const ResidentDirectoryScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.residentDetail,
+      builder: (context, state) {
+        final residentId = state.extra as String? ?? '';
+        return ResidentDetailScreen(residentId: residentId);
+      },
+    ),
+
+    GoRoute(
+      path: RouteNames.visitorLog,
+      builder: (context, state) => const VisitorLogScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.registerVisitor,
+      builder: (context, state) => const RegisterVisitorScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.visitorDetail,
+      builder: (context, state) {
+        final visitorId = state.extra as String? ?? '';
+        return VisitorDetailScreen(visitorId: visitorId);
       },
     ),
   ],

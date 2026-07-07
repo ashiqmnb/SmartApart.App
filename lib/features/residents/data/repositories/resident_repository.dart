@@ -1,6 +1,7 @@
 import '../../../../core/errors/app_exception.dart';
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../shared/models/paged_result.dart';
 import '../models/family_member_models.dart';
 import '../models/resident_models.dart';
 
@@ -89,6 +90,82 @@ class ResidentRepository {
   Future<void> deleteFamilyMember(String residentId, String memberId) async {
     try {
       await _dio.delete('/resident/$residentId/family-members/$memberId');
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  // ── Admin: Directory & Search ───────────────────────────────────
+
+  Future<PagedResult<ResidentDetailModel>> getAllResidents({
+    required int page,
+    required int pageSize,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/resident',
+        queryParameters: {'page': page, 'pageSize': pageSize},
+      );
+      final apiResponse = ApiResponse<PagedResult<ResidentDetailModel>>.fromJson(
+        response.data,
+            (json) => PagedResult<ResidentDetailModel>.fromJson(
+          json,
+              (item) => ResidentDetailModel.fromJson(item),
+        ),
+      );
+      return apiResponse.data!;
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<List<ResidentDetailModel>> searchResidents(String query) async {
+    try {
+      final response = await _dio.get(
+        '/resident/search',
+        queryParameters: {'q': query},
+      );
+      final apiResponse = ApiResponse<List<ResidentDetailModel>>.fromJson(
+        response.data,
+            (json) => (json as List)
+            .map((e) => ResidentDetailModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+      return apiResponse.data ?? [];
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<ResidentDetailModel> getResidentById(String residentId) async {
+    try {
+      final response = await _dio.get('/resident/$residentId');
+      final apiResponse = ApiResponse<ResidentDetailModel>.fromJson(
+        response.data,
+            (json) => ResidentDetailModel.fromJson(json),
+      );
+      return apiResponse.data!;
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  /// Search for role-appropriate resident info — used by non-Admin
+  /// callers (e.g. Security's resident picker on Register Visitor).
+  /// Backend returns ResidentPublicDto (slim shape) for non-Admin roles.
+  Future<List<ResidentPublicModel>> searchResidentsPublic(String query) async {
+    try {
+      final response = await _dio.get(
+        '/resident/search',
+        queryParameters: {'q': query},
+      );
+      final apiResponse = ApiResponse<List<ResidentPublicModel>>.fromJson(
+        response.data,
+            (json) => (json as List)
+            .map((e) => ResidentPublicModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+      return apiResponse.data ?? [];
     } catch (e) {
       throw _handleError(e);
     }
