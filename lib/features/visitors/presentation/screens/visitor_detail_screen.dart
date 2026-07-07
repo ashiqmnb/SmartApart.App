@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/providers/profile_provider.dart';
-import '../../data/models/visitor_models.dart';
 import '../providers/visitor_provider.dart';
 
 class VisitorDetailScreen extends StatefulWidget {

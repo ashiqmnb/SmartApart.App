@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../residents/data/models/resident_models.dart';
 import '../../../residents/data/repositories/resident_repository.dart';
@@ -7,7 +6,6 @@ import '../../../residents/data/repositories/resident_repository.dart';
 /// when registering a visitor. Wraps ResidentRepository.searchResidentsPublic().
 class ResidentSearchDelegate extends SearchDelegate<ResidentPublicModel?> {
   final ResidentRepository _repository = ResidentRepository();
-  Timer? _debounce;
 
   ResidentSearchDelegate() : super(searchFieldLabel: 'Search by name, apartment, or block');
 

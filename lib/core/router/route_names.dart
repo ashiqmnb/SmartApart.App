@@ -24,4 +24,15 @@ class RouteNames {
   static const String visitorLog = '/visitor-log';
   static const String visitorDetail = '/visitor-detail';
   static const String registerVisitor = '/register-visitor';
+
+  static const String maintenanceList = '/maintenance';
+  static const String maintenanceDetail = '/maintenance-detail'; // used as '/maintenance-detail/:id'
+  static const String createMaintenance = '/maintenance/create';
+  static const String adminMaintenanceDetail = '/admin-maintenance-detail'; // '/admin-maintenance-detail/:id'
+
+  static const String complaintList = '/complaints';
+  static const String complaintDetail = '/complaint-detail'; // used as '/complaint-detail/:id'
+  static const String submitComplaint = '/complaints/submit';
+  static const String adminComplaintDetail = '/admin-complaint-detail'; // '/admin-complaint-detail/:id'
+
 }

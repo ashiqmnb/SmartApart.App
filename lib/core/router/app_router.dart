@@ -3,6 +3,14 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/screens/change_password_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
+import '../../features/complaints/presentation/screens/admin_complaint_detail_screen.dart';
+import '../../features/complaints/presentation/screens/complaint_detail_screen.dart';
+import '../../features/complaints/presentation/screens/complaint_list_screen.dart';
+import '../../features/complaints/presentation/screens/submit_complaint_screen.dart';
+import '../../features/maintenance/presentation/screens/admin_maintenance_detail_screen.dart';
+import '../../features/maintenance/presentation/screens/create_maintenance_screen.dart';
+import '../../features/maintenance/presentation/screens/maintenance_detail_screen.dart';
+import '../../features/maintenance/presentation/screens/maintenance_list_screen.dart';
 import '../../features/residents/data/models/family_member_models.dart';
 import '../../features/residents/presentation/screens/add_edit_family_member_screen.dart';
 import '../../features/residents/presentation/screens/edit_profile_screen.dart';
@@ -127,6 +135,7 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
+
     GoRoute(
       path: RouteNames.visitorLog,
       builder: (context, state) => const VisitorLogScreen(),
@@ -140,6 +149,54 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final visitorId = state.extra as String? ?? '';
         return VisitorDetailScreen(visitorId: visitorId);
+      },
+    ),
+
+
+    GoRoute(
+      path: RouteNames.maintenanceList,
+      builder: (context, state) => const MaintenanceListScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.maintenanceDetail}/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return MaintenanceDetailScreen(requestId: id);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.createMaintenance,
+      builder: (context, state) => const CreateMaintenanceScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.adminMaintenanceDetail}/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return AdminMaintenanceDetailScreen(requestId: id);
+      },
+    ),
+
+
+    GoRoute(
+      path: RouteNames.complaintList,
+      builder: (context, state) => const ComplaintListScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.complaintDetail}/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return ComplaintDetailScreen(complaintId: id);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.submitComplaint,
+      builder: (context, state) => const SubmitComplaintScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.adminComplaintDetail}/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return AdminComplaintDetailScreen(complaintId: id);
       },
     ),
   ],

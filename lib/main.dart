@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'features/auth/presentation/providers/profile_provider.dart';
+import 'features/complaints/presentation/providers/complaint_provider.dart';
+import 'features/maintenance/presentation/providers/maintenance_provider.dart';
 import 'features/residents/presentation/providers/family_member_provider.dart';
 import 'features/residents/presentation/providers/resident_detail_provider.dart';
 import 'features/residents/presentation/providers/resident_directory_provider.dart';
@@ -47,6 +49,8 @@ class SmartApartApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ResidentDirectoryProvider()),
         ChangeNotifierProvider(create: (_) => ResidentDetailProvider()),
         ChangeNotifierProvider(create: (_) => VisitorProvider()),
+        ChangeNotifierProvider(create: (_) => MaintenanceProvider()),
+        ChangeNotifierProvider(create: (_) => ComplaintProvider()),
       ],
       child: MaterialApp.router(
         title: 'SmartApart',
