@@ -59,6 +59,21 @@ class HomePlaceholderScreen extends StatelessWidget {
               onPressed: () => context.push(RouteNames.complaintList),
               child: const Text('Complaint List (debug)'),
             ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => context.push(RouteNames.announcementFeed),
+              child: const Text('Announcements (debug)'),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => context.push(RouteNames.adminAnnouncementList),
+              child: const Text('Manage Announcements (debug)'),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => context.push(RouteNames.amenityList),
+              child: const Text('Amenities (debug)'),
+            ),
           ],
         ),
       ),

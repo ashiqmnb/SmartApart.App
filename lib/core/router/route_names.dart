@@ -35,4 +35,15 @@ class RouteNames {
   static const String submitComplaint = '/complaints/submit';
   static const String adminComplaintDetail = '/admin-complaint-detail'; // '/admin-complaint-detail/:id'
 
+  static const String announcementFeed = '/announcements';
+  static const String announcementDetail = '/announcement-detail'; // '/announcement-detail/:id'
+  static const String createAnnouncement = '/announcements/create';
+  static const String editAnnouncement = '/announcements/edit'; // used as '/announcements/edit/:id'
+  static const String adminAnnouncementList = '/admin/announcements';
+
+  static const String amenityList = '/amenities';
+  static const String amenityDetail = '/amenity-detail'; // '/amenity-detail/:id'
+  static const String createAmenity = '/amenities/create';
+  static const String editAmenity = '/amenities/edit'; // '/amenities/edit/:id'
+
 }

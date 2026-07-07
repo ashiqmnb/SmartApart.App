@@ -1,5 +1,14 @@
 import 'package:go_router/go_router.dart';
 
+import '../../features/amenities/data/models/amenity_models.dart';
+import '../../features/amenities/presentation/screens/amenity_detail_screen.dart';
+import '../../features/amenities/presentation/screens/amenity_form_screen.dart';
+import '../../features/amenities/presentation/screens/amenity_list_screen.dart';
+import '../../features/announcements/data/models/announcement_models.dart';
+import '../../features/announcements/presentation/screens/admin_announcement_list_screen.dart';
+import '../../features/announcements/presentation/screens/announcement_detail_screen.dart';
+import '../../features/announcements/presentation/screens/announcement_feed_screen.dart';
+import '../../features/announcements/presentation/screens/announcement_form_screen.dart';
 import '../../features/auth/presentation/screens/change_password_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
@@ -197,6 +206,61 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final id = state.pathParameters['id']!;
         return AdminComplaintDetailScreen(complaintId: id);
+      },
+    ),
+
+
+    GoRoute(
+      path: RouteNames.announcementFeed,
+      builder: (context, state) => const AnnouncementFeedScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.announcementDetail}/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return AnnouncementDetailScreen(announcementId: id);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.createAnnouncement,
+      builder: (context, state) => const AnnouncementFormScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.editAnnouncement}/:id',
+      builder: (context, state) {
+        // Edit mode expects the full AnnouncementDetailModel passed via
+        // extra (fetched already by the caller — Step 5's list screen) —
+        // avoids a redundant GET call just to open the edit form.
+        final announcement = state.extra as AnnouncementDetailModel?;
+        return AnnouncementFormScreen(announcement: announcement);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.adminAnnouncementList,
+      builder: (context, state) => const AdminAnnouncementListScreen(),
+    ),
+
+
+    GoRoute(
+      path: RouteNames.amenityList,
+      builder: (context, state) => const AmenityListScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.amenityDetail}/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return AmenityDetailScreen(amenityId: id);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.createAmenity,
+      builder: (context, state) => const AmenityFormScreen(),
+    ),
+    GoRoute(
+      path: '${RouteNames.editAmenity}/:id',
+      builder: (context, state) {
+        final amenity = state.extra as AmenityDetailModel?;
+        return AmenityFormScreen(amenity: amenity);
       },
     ),
   ],

@@ -50,9 +50,6 @@ class ComplaintRepository {
       );
       return apiResponse.data!;
     } catch (e) {
-      if (e is DioException) {
-        print('CREATE COMPLAINT RESPONSE DATA: ${e.response?.data}'); // temporary debug line
-      }
       throw _handleError(e);
     }
   }
