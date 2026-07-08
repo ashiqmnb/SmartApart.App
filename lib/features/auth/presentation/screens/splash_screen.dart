@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/storage/secure_storage.dart';
 import '../../../../core/router/route_names.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/storage/secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,36 +14,45 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkAuthAndRedirect();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _redirect());
   }
 
-  Future<void> _checkAuthAndRedirect() async {
-    // Small delay so the splash branding is visible, not an instant flash.
-    await Future.delayed(const Duration(milliseconds: 600));
-
+  Future<void> _redirect() async {
     final isLoggedIn = await SecureStorage.isLoggedIn();
+
+    if (!isLoggedIn) {
+      if (mounted) context.go(RouteNames.login);
+      return;
+    }
+
+    final role = await SecureStorage.getRole();
     if (!mounted) return;
-    context.go(isLoggedIn ? RouteNames.home : RouteNames.login);
+
+    switch (role) {
+      case 'Admin':
+        context.go(RouteNames.adminHome);
+        break;
+      case 'Security':
+        context.go(RouteNames.securityRegisterVisitor);
+        break;
+      case 'Resident':
+        context.go(RouteNames.residentAnnouncements);
+        break;
+      default:
+        _handleUnknownRole();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.apartment_rounded, size: 64, color: AppColors.lightPrimary),
-            SizedBox(height: 16),
-            Text(
-              'SmartApart',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 24),
-            CircularProgressIndicator(),
-          ],
-        ),
-      ),
+      body: Center(child: CircularProgressIndicator()),
     );
+  }
+
+  Future<void> _handleUnknownRole() async {
+    await SecureStorage.clearAll();
+    if (!mounted) return;
+    context.go(RouteNames.login);
   }
 }

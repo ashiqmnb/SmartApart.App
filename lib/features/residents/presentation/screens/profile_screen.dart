@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../../shared/widgets/acms_button.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/presentation/providers/profile_provider.dart';
 import '../providers/resident_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -57,6 +58,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
     }
+  }
+
+  Future<void> _handleLogout() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Log Out'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Log Out'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    await context.read<AuthProvider>().logout();
+    if (!mounted) return;
+    context.go(RouteNames.login);
   }
 
   @override
@@ -215,6 +242,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   AcmsButton(
                     label: 'Edit Profile',
                     onPressed: () => context.push(RouteNames.editProfile),
+                  ),
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: _handleLogout,
+                    icon: const Icon(Icons.logout, color: Colors.red),
+                    label: const Text('Log Out', style: TextStyle(color: Colors.red)),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.red),
+                    ),
                   ),
                 ],
               ),

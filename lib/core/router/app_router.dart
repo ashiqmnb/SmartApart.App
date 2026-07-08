@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 
+import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
+import '../../features/admin/presentation/screens/admin_shell_screen.dart';
 import '../../features/amenities/data/models/amenity_models.dart';
 import '../../features/amenities/presentation/screens/amenity_detail_screen.dart';
 import '../../features/amenities/presentation/screens/amenity_form_screen.dart';
@@ -27,7 +29,9 @@ import '../../features/residents/presentation/screens/family_members_screen.dart
 import '../../features/residents/presentation/screens/profile_screen.dart';
 import '../../features/residents/presentation/screens/resident_detail_screen.dart';
 import '../../features/residents/presentation/screens/resident_directory_screen.dart';
+import '../../features/residents/presentation/screens/resident_shell_screen.dart';
 import '../../features/visitors/presentation/screens/register_visitor_screen.dart';
+import '../../features/visitors/presentation/screens/security_shell_screen.dart';
 import '../../features/visitors/presentation/screens/visitor_detail_screen.dart';
 import '../../features/visitors/presentation/screens/visitor_log_screen.dart';
 import '../storage/secure_storage.dart';
@@ -36,7 +40,6 @@ import 'route_names.dart';
 // Temporary placeholder screens — real ones arrive in Phase 2.2.
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
-import '../../features/auth/presentation/screens/home_placeholder_screen.dart';
 
 /// App-wide router config. Similar to createBrowserRouter in React Router —
 /// declares path → screen mappings plus a guard that runs before each navigation.
@@ -47,29 +50,32 @@ final GoRouter appRouter = GoRouter(
   // Returning null means "no redirect, proceed as requested."
   redirect: (context, state) async {
     final isLoggedIn = await SecureStorage.isLoggedIn();
-
-    final publicRoutes = [
-      RouteNames.login,
-      RouteNames.forgotPassword,
-      RouteNames.resetPassword,
-    ];
-    final isGoingToPublicRoute = publicRoutes.contains(state.matchedLocation);
+    final isGoingToAuthScreen = state.matchedLocation == RouteNames.login ||
+        state.matchedLocation == RouteNames.forgotPassword ||
+        state.matchedLocation == RouteNames.resetPassword;
     final isGoingToSplash = state.matchedLocation == RouteNames.splash;
 
-    // Let splash screen handle its own routing decision on startup.
     if (isGoingToSplash) return null;
 
     // Not logged in, trying to reach a protected route → send to login.
-    if (!isLoggedIn && !isGoingToPublicRoute) return RouteNames.login;
+    if (!isLoggedIn && !isGoingToAuthScreen) return RouteNames.login;
 
-    // Logged in, but sitting on login → send to home.
-    // (Forgot/Reset Password should stay reachable even if technically
-    // logged in, e.g. testing flows — but typically only Login redirects away.)
-    if (isLoggedIn && state.matchedLocation == RouteNames.login) {
-      return RouteNames.home;
+    // Logged in, but sitting on an auth screen → send to their shell home.
+    if (isLoggedIn && isGoingToAuthScreen) {
+      final role = await SecureStorage.getRole();
+      switch (role) {
+        case 'Admin':
+          return RouteNames.adminHome;
+        case 'Security':
+          return RouteNames.securityRegisterVisitor;
+        case 'Resident':
+          return RouteNames.residentAnnouncements;
+        default:
+          return RouteNames.login;
+      }
     }
 
-    return null; // no redirect needed
+    return null;
   },
 
   routes: [
@@ -80,10 +86,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.login,
       builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      path: RouteNames.home,
-      builder: (context, state) => const HomePlaceholderScreen(),
     ),
     GoRoute(
       path: RouteNames.forgotPassword,
@@ -262,6 +264,82 @@ final GoRouter appRouter = GoRouter(
         final amenity = state.extra as AmenityDetailModel?;
         return AmenityFormScreen(amenity: amenity);
       },
+    ),
+    // ── Resident Shell ──────────────────────────────────────
+    ShellRoute(
+      builder: (context, state, child) => ResidentShellScreen(child: child),
+      routes: [
+        GoRoute(
+          path: RouteNames.residentAnnouncements,
+          builder: (context, state) => const AnnouncementFeedScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.residentMaintenance,
+          builder: (context, state) => const MaintenanceListScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.residentComplaints,
+          builder: (context, state) => const ComplaintListScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.residentVisitors,
+          builder: (context, state) => const VisitorLogScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.residentProfile,
+          builder: (context, state) => const ProfileScreen(),
+        ),
+      ],
+    ),
+
+    // ── Security Shell ──────────────────────────────────────
+    ShellRoute(
+      builder: (context, state, child) => SecurityShellScreen(child: child),
+      routes: [
+        GoRoute(
+          path: RouteNames.securityRegisterVisitor,
+          builder: (context, state) => const RegisterVisitorScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.securityVisitorLog,
+          builder: (context, state) => const VisitorLogScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.securityProfile,
+          builder: (context, state) => const ProfileScreen(),
+        ),
+      ],
+    ),
+
+    // ── Admin Shell ───────────────────────────────────────────
+    ShellRoute(
+      builder: (context, state, child) => AdminShellScreen(child: child),
+      routes: [
+        GoRoute(
+          path: RouteNames.adminHome,
+          builder: (context, state) => const AdminDashboardScreen(), // Step 4
+        ),
+        GoRoute(
+          path: RouteNames.adminResidents,
+          builder: (context, state) => const ResidentDirectoryScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.adminMaintenance,
+          builder: (context, state) => const MaintenanceListScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.adminComplaints,
+          builder: (context, state) => const ComplaintListScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.adminAnnouncementList,
+          builder: (context, state) => const AnnouncementFeedScreen(),
+        ),
+        GoRoute(
+          path: RouteNames.adminAmenities,
+          builder: (context, state) => const AmenityListScreen(),
+        ),
+      ],
     ),
   ],
 );

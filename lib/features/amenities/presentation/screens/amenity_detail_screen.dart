@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:smartapart_app/features/amenities/data/models/amenity_models.dart';
 import '../../../../core/router/route_names.dart';
 import '../../../auth/presentation/providers/profile_provider.dart';
 import '../providers/amenity_provider.dart';
@@ -153,10 +154,7 @@ class _AmenityDetailScreenState extends State<AmenityDetailScreen> {
                       ElevatedButton.icon(
                         icon: const Icon(Icons.edit_outlined),
                         label: const Text('Edit Amenity'),
-                        onPressed: () async {
-                          await context.push('${RouteNames.editAmenity}/${amenity.id}', extra: amenity);
-                          if (mounted) context.read<AmenityProvider>().fetchDetail(widget.amenityId);
-                        },
+                        onPressed: () => _handleEditPressed(amenity),
                       ),
                   ],
                 ),
@@ -219,5 +217,11 @@ class _AmenityDetailScreenState extends State<AmenityDetailScreen> {
     } catch (_) {
       return raw;
     }
+  }
+
+  Future<void> _handleEditPressed(AmenityDetailModel amenity) async {
+    await context.push('${RouteNames.editAmenity}/${amenity.id}', extra: amenity);
+    if (!mounted) return;
+    context.read<AmenityProvider>().fetchDetail(widget.amenityId);
   }
 }

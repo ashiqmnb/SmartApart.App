@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/router/route_names.dart';
+import '../../../../core/storage/secure_storage.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../shared/widgets/acms_button.dart';
 import '../../../../shared/widgets/acms_text_field.dart';
@@ -41,7 +42,22 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (success && mounted) {
-      context.go(RouteNames.home);
+      final role = await SecureStorage.getRole();
+      if (!mounted) return;
+
+      switch (role) {
+        case 'Admin':
+          context.go(RouteNames.adminHome);
+          break;
+        case 'Security':
+          context.go(RouteNames.securityRegisterVisitor);
+          break;
+        case 'Resident':
+          context.go(RouteNames.residentAnnouncements);
+          break;
+        default:
+          context.go(RouteNames.login);
+      }
     }
     // On failure, errorMessage is already set on AuthProvider and
     // the Consumer below will display it automatically.

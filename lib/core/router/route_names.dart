@@ -5,11 +5,29 @@ class RouteNames {
 
   static const String splash = '/splash';
   static const String login = '/login';
-  static const String home = '/home';
-
   static const String forgotPassword = '/forgot-password';
   static const String resetPassword = '/reset-password';
   static const String changePassword = '/change-password';
+
+  // ── Resident Shell ──────────────────────────────────────
+  static const String residentAnnouncements = '/resident/announcements';
+  static const String residentMaintenance = '/resident/maintenance';
+  static const String residentComplaints = '/resident/complaints';
+  static const String residentVisitors = '/resident/visitors';
+  static const String residentProfile = '/resident/profile';
+
+  // ── Security Shell ──────────────────────────────────────
+  static const String securityRegisterVisitor = '/security/register-visitor';
+  static const String securityVisitorLog = '/security/visitor-log';
+  static const String securityProfile = '/security/profile';
+
+  // ── Admin Shell ───────────────────────────────────────────
+  static const String adminHome = '/admin/home';
+  static const String adminResidents = '/admin/residents';
+  static const String adminMaintenance = '/admin/maintenance';
+  static const String adminComplaints = '/admin/complaints';
+  static const String adminAmenities = '/admin/amenities';
+  static const String adminProfile = '/admin/profile';
 
   static const String profile = '/profile';
   static const String editProfile = '/profile/edit';

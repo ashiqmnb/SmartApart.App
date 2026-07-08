@@ -169,7 +169,7 @@ class _AmenityFormScreenState extends State<AmenityFormScreen> {
       // New amenities default to "Available" on the backend — only
       // call updateAvailability if the admin picked something else.
       if (success && _availability != 'Available') {
-        await provider.updateAvailability(amenityId!, _availability);
+        await provider.updateAvailability(amenityId, _availability);
       }
     }
 
